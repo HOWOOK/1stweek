@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         //activity_main.xml의 레이아웃 UI를 이용하겠다!
         setContentView(R.layout.activity_main);
 
+
         //Set a toolbar to replace to action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
