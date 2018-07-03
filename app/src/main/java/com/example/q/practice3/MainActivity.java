@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +29,10 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -42,38 +46,28 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-
     private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //activity를 위한 레이아웃  UI를 설정할때 이용
+        //activity_main.xml의 레이아웃 UI를 이용하겠다!
         setContentView(R.layout.activity_main);
 
-        /*PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        new TedPermission(this)
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("If you reject permission, you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.READ_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE)
-                .check();*/
-
+        //Set a toolbar to replace to action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+
+        // viewpager란 수평으로 view를 좌우로 스크롤 할때 사용하는 클래스
+        // viewpager가 표시하는 view는 pageradapter를 통해 공급받는다.
+        // pageradapter를 통해 화면에 표시 될 view의 라이프 사이클을 관리 할 수 있다. (listview와 listadapter의 관계와 동일하다.)
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -83,14 +77,17 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+
+        //remove
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
     }
 
@@ -102,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+    //onCreateOptionMenu()는 최초에 메뉴키가 눌렸을 때 호출되고
+    //onOptionsItemSeleated()는 메뉴 아이템이 클릭되었을때 호출된다.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -123,6 +123,13 @@ public class MainActivity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
+
+    //Fragment는 Activity 내부에서 UI나 프로세스를 정의할 수 있는 더 작은 단위이고,
+    // 하나의 Activity에 다수의 Fragment를 배치하거나 여러 개의 Activity에서 하나의 Fragment를 재사용하는 것이 가능하다.
+    // 따라서 Fragment는 Activity를 구성하는 작은 모듈이라고 생각하면 되며, Activity와는 별도의
+    // 라이프사이클과 이벤트 또한 따로 처리가 가능하고, 하나의 Activity가 실행되고 있을 때
+    // 유동적으로 추가하고 삭제가 가능하도록 되어있다.
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -167,5 +174,4 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
         }
-
     }
