@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -26,6 +27,7 @@ import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Tab2Pictures extends Fragment {
@@ -57,18 +59,21 @@ public class Tab2Pictures extends Fragment {
 //
 
     GridView gv;
-    ArrayList<String> list;
-
+    final ArrayList<String> items = new ArrayList<String>() ;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab2pictures, container, false);
+        final GridAdapter adapter = new GridAdapter();
+
         //list = imageReader(Environment.getExternalStorageDirectory());
 
         gv = (GridView) rootView.findViewById(R.id.gridView);
-        gv.setAdapter(new GridAdapter());
+        gv.setAdapter(adapter);
+
+
 
         Button htmlTitleButton = (Button) rootView.findViewById(R.id.special);
         htmlTitleButton.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +83,8 @@ public class Tab2Pictures extends Fragment {
                 JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask();
                 jsoupAsyncTask.execute();
                 cnt++;
+                adapter.notifyDataSetChanged();
+
             }
         });
 
@@ -89,17 +96,17 @@ public class Tab2Pictures extends Fragment {
 
         @Override
         public int getCount() {
-            return list.size();
+            return items.size();
         }
 
         @Override
-        public Object getItem(int i) {
-            return list.get(i);
+        public Object getItem(int position) {
+            return items.get(position);
         }
 
         @Override
-        public long getItemId(int i) {
-            return 0;
+        public long getItemId(int position) {
+            return position;
         }
 
 
@@ -119,8 +126,8 @@ public class Tab2Pictures extends Fragment {
             ////////////////////////////////////////////////////////////////HTML에서 가져오기
 
             imageviewHtmlDocument = convertView.findViewById(R.id.icons);
-
-
+            System.out.println("지금 포지션의 아이템은 ["+position+"] : "+items.get(position)+"입니다\n");
+            Glide.with(convertView).load(items.get(position)).into(imageviewHtmlDocument);
 
             return convertView;
         }
@@ -150,52 +157,51 @@ public class Tab2Pictures extends Fragment {
                 //System.out.println("결과는1: " + uriStr);
                 String data = "http://10000img.com/";
                 data += uriStr.substring(target_num, uriStr.substring(target_num).indexOf(" ")+target_num-1);
-                System.out.println("결과는2: " + data);
+                System.out.println("결과는1: " + data);
 
                 htmlContentInStringFormat = data;
-                list.add(data);
+                System.out.println("결과는2: " + htmlContentInStringFormat);
 
-                for (int i = 0; i<list.size(); i++){
-                    System.out.println("지금 리스트는["+ i + "] : " + data);
-                }
+//                //list.add(htmlContentInStringFormat);
+//
+//                for (int i = 0; i<list.size(); i++){
+//                    System.out.println("지금들어있는 리스트는 ["+i+"]"+list.get(i)+"\n");
+//                }
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
         }
 
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            if(getView()==null){System.out.println("get View 비었음\n");
-//            }else {System.out.println("get View은 요거지롱 :"+getView()+"\n");
-//            }
-//            if(htmlContentInStringFormat==null){System.out.println("string 비었음\n");
-//            }else {System.out.println("string은 요거지롱 :"+htmlContentInStringFormat+"\n");
-//            }
-//            if(imageviewHtmlDocument==null){System.out.println("image 비었음\n");
-//            }else {System.out.println("image은 요거지롱 :"+imageviewHtmlDocument+"\n");
+        @Override
+        protected void onPostExecute(Void result) {
+                items.add(htmlContentInStringFormat);
+                for (int i = 0; i<items.size(); i++){
+                    System.out.println("지금들어있는 리스트는 ["+i+"]"+items.get(i)+"\n");
+                }
+        }
+    }
+
+
+
+
+//    ArrayList<File> imageReader(File root){
+//        ArrayList<File> a = new ArrayList<>();
+//
+//        File[] files = root.listFiles();
+//        for (int i = 0; i<files.length; i++){
+//            if (files[i].isDirectory()){
+//                a.addAll(imageReader(files[i]));
+//            }else{
+//                if(files[i].getName().endsWith(".jpg")){
+//                    a.add(files[i]);
+//                }
 //            }
 //        }
-    }
-
-
-
-
-    ArrayList<File> imageReader(File root){
-        ArrayList<File> a = new ArrayList<>();
-
-        File[] files = root.listFiles();
-        for (int i = 0; i<files.length; i++){
-            if (files[i].isDirectory()){
-                a.addAll(imageReader(files[i]));
-            }else{
-                if(files[i].getName().endsWith(".jpg")){
-                    a.add(files[i]);
-                }
-            }
-        }
-        return a;
-    }
+//        return a;
+//    }
 
 
 }
