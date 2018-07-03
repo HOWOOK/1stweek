@@ -6,19 +6,11 @@
 
     <ImageView
         android:id="@+id/icons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/lettera"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="1dp"
+
         />
 
-    <TextView
-        android:id="@+id/letters"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/icons"
-        android:layout_marginLeft="8dp"
-        android:gravity="center_horizontal"
-        android:text="A" />
 </RelativeLayout>
