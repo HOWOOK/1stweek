@@ -6,12 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/special"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="82dp"
+        android:layout_marginStart="136dp"
+        android:text="Button" />
+
     <GridView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="356dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:columnWidth="100dp"
+        android:gravity="center"
         android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        />
+        android:stretchMode="columnWidth" />
 </RelativeLayout>
