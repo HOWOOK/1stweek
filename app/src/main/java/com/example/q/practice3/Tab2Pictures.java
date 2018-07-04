@@ -1,5 +1,6 @@
 package com.example.q.practice3;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 
 import android.os.AsyncTask;
@@ -60,13 +61,13 @@ public class Tab2Pictures extends Fragment {
 
     GridView gv;
     final ArrayList<String> items = new ArrayList<String>() ;
-
+    final GridAdapter adapter = new GridAdapter();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab2pictures, container, false);
-        final GridAdapter adapter = new GridAdapter();
+
 
         //list = imageReader(Environment.getExternalStorageDirectory());
 
@@ -83,8 +84,6 @@ public class Tab2Pictures extends Fragment {
                 JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask();
                 jsoupAsyncTask.execute();
                 cnt++;
-                adapter.notifyDataSetChanged();
-
             }
         });
 
@@ -126,7 +125,6 @@ public class Tab2Pictures extends Fragment {
             ////////////////////////////////////////////////////////////////HTML에서 가져오기
 
             imageviewHtmlDocument = convertView.findViewById(R.id.icons);
-            System.out.println("지금 포지션의 아이템은 ["+position+"] : "+items.get(position)+"입니다\n");
             Glide.with(convertView).load(items.get(position)).into(imageviewHtmlDocument);
 
             return convertView;
@@ -136,8 +134,16 @@ public class Tab2Pictures extends Fragment {
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void, Void> {
 
+        ProgressDialog asyncDialog = new ProgressDialog(getContext());
+
+
         @Override
         protected void onPreExecute() {
+
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("최대한 빠르게 불러오고 있으니 ㄱㄷ");
+            asyncDialog.show();
+
             super.onPreExecute();
         }
 
@@ -157,16 +163,17 @@ public class Tab2Pictures extends Fragment {
                 //System.out.println("결과는1: " + uriStr);
                 String data = "http://10000img.com/";
                 data += uriStr.substring(target_num, uriStr.substring(target_num).indexOf(" ")+target_num-1);
-                System.out.println("결과는1: " + data);
+                //System.out.println("결과는1: " + data);
 
                 htmlContentInStringFormat = data;
-                System.out.println("결과는2: " + htmlContentInStringFormat);
+                //System.out.println("결과는2: " + htmlContentInStringFormat);
 
 //                //list.add(htmlContentInStringFormat);
 //
 //                for (int i = 0; i<list.size(); i++){
 //                    System.out.println("지금들어있는 리스트는 ["+i+"]"+list.get(i)+"\n");
 //                }
+
 
 
             } catch (IOException e) {
@@ -177,10 +184,11 @@ public class Tab2Pictures extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
+            //Asynctask는 비동기적으로 실행되기 때문에 doInBackground의 일이 끝나면 이 함수가 불린다!
+
                 items.add(htmlContentInStringFormat);
-                for (int i = 0; i<items.size(); i++){
-                    System.out.println("지금들어있는 리스트는 ["+i+"]"+items.get(i)+"\n");
-                }
+                adapter.notifyDataSetChanged();
+                asyncDialog.dismiss();
         }
     }
 
@@ -202,6 +210,9 @@ public class Tab2Pictures extends Fragment {
 //        }
 //        return a;
 //    }
+
+
+
 
 
 }
