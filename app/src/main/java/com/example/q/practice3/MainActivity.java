@@ -51,34 +51,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //activity를 위한 레이아웃  UI를 설정할때 이용
-        //activity_main.xml의 레이아웃 UI를 이용하겠다!
-        setContentView(R.layout.activity_main);
+
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                //activity를 위한 레이아웃  UI를 설정할때 이용
+                //activity_main.xml의 레이아웃 UI를 이용하겠다!
+                setContentView(R.layout.activity_main);
 
 
-        //Set a toolbar to replace to action bar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+                //Set a toolbar to replace to action bar
+                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                setSupportActionBar(toolbar);
+                // Create the adapter that will return a fragment for each of the three
+                // primary sections of the activity.
+                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 
-        // viewpager란 수평으로 view를 좌우로 스크롤 할때 사용하는 클래스
-        // viewpager가 표시하는 view는 pageradapter를 통해 공급받는다.
-        // pageradapter를 통해 화면에 표시 될 view의 라이프 사이클을 관리 할 수 있다. (listview와 listadapter의 관계와 동일하다.)
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+                // viewpager란 수평으로 view를 좌우로 스크롤 할때 사용하는 클래스
+                // viewpager가 표시하는 view는 pageradapter를 통해 공급받는다.
+                // pageradapter를 통해 화면에 표시 될 view의 라이프 사이클을 관리 할 수 있다. (listview와 listadapter의 관계와 동일하다.)
+                // Set up the ViewPager with the sections adapter.
+                mViewPager = (ViewPager) findViewById(R.id.container);
+                mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+                mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 
 
-        //remove
+                //remove
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -87,8 +92,20 @@ public class MainActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
+            }
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(getApplicationContext(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+        new TedPermission(getApplicationContext())
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission, you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
+                .check();
+            }
 
-    }
+
 
 
     @Override
