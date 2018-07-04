@@ -29,7 +29,6 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         //activity를 위한 레이아웃  UI를 설정할때 이용
         //activity_main.xml의 레이아웃 UI를 이용하겠다!
         setContentView(R.layout.activity_main);
-
-
 
 
         //Set a toolbar to replace to action bar
