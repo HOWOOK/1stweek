@@ -41,10 +41,7 @@ public class Tab1Contacts extends Fragment {
 
             lv = (ListView) rootView.findViewById(R.id.listview);
 
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(rootView.getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+
 
                 Cursor c;
                 c = rootView.getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
@@ -82,18 +79,9 @@ public class Tab1Contacts extends Fragment {
                 c.close();
                 ListviewAdapter adapter = new ListviewAdapter(rootView.getContext(), R.layout.tab1contacts_item, data);
                 lv.setAdapter(adapter);
-            }
 
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(rootView.getContext(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-            }
-        };
-        new TedPermission(rootView.getContext())
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("If you reject permission, you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.READ_CONTACTS)
-                .check();
+
+
 
 
 

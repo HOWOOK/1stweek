@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/special"
-        android:columnWidth="100dp"
+        android:columnWidth="120dp"
         android:gravity="center"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"

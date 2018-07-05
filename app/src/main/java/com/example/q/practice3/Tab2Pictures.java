@@ -1,8 +1,10 @@
 package com.example.q.practice3;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -60,12 +62,13 @@ public class Tab2Pictures extends Fragment {
 //
 
     GridView gv;
-    final ArrayList<String> items = new ArrayList<String>() ;
+    final static ArrayList<String> items = new ArrayList<String>() ;
     final GridAdapter adapter = new GridAdapter();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        items.clear();
         final View rootView = inflater.inflate(R.layout.tab2pictures, container, false);
 
 
@@ -91,7 +94,7 @@ public class Tab2Pictures extends Fragment {
         return rootView;
     }
 
-    class GridAdapter extends BaseAdapter {
+    public class GridAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -210,9 +213,5 @@ public class Tab2Pictures extends Fragment {
 //        }
 //        return a;
 //    }
-
-
-
-
 
 }
