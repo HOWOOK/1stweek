@@ -1,12 +1,10 @@
 package com.example.q.practice3;
 
 import android.Manifest;
-import android.content.Context;
 import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -15,12 +13,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -65,29 +61,29 @@ public class MainActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_main);
 
 
-        //Set a toolbar to replace to action bar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+                //Set a toolbar to replace to action bar
+                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                setSupportActionBar(toolbar);
+                // Create the adapter that will return a fragment for each of the three
+                // primary sections of the activity.
+                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 
-        // viewpager란 수평으로 view를 좌우로 스크롤 할때 사용하는 클래스
-        // viewpager가 표시하는 view는 pageradapter를 통해 공급받는다.
-        // pageradapter를 통해 화면에 표시 될 view의 라이프 사이클을 관리 할 수 있다. (listview와 listadapter의 관계와 동일하다.)
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (CustomViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+                // viewpager란 수평으로 view를 좌우로 스크롤 할때 사용하는 클래스
+                // viewpager가 표시하는 view는 pageradapter를 통해 공급받는다.
+                // pageradapter를 통해 화면에 표시 될 view의 라이프 사이클을 관리 할 수 있다. (listview와 listadapter의 관계와 동일하다.)
+                // Set up the ViewPager with the sections adapter.
+                mViewPager = (ViewPager) findViewById(R.id.container);
+                mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+                mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 
 
-        //remove
+                //remove
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -105,11 +101,13 @@ public class MainActivity extends AppCompatActivity {
         new TedPermission(getApplicationContext())
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("If you reject permission, you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
+                .setPermissions(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS,
+                        Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA)
                 .check();
-            }
-
     }
+
+
 
 
     @Override
@@ -158,20 +156,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-           switch (position){
-               case 0:
-                   Tab1Contacts tab1 = new Tab1Contacts();
-                   return tab1;
-               case 1:
-                   Tab2Pictures tab2 = new Tab2Pictures();
-                   return tab2;
-               case 2:
-                   Tab3Anon tab3 = new Tab3Anon();
-                   return tab3;
+            switch (position){
+                case 0:
+                    Tab1Contacts tab1 = new Tab1Contacts();
+                    return tab1;
+                case 1:
+                    Tab2Pictures tab2 = new Tab2Pictures();
+                    return tab2;
+                case 2:
+                    Tab3Anon tab3 = new Tab3Anon();
+                    return tab3;
 
-               default:
-                   return null;
-           }
+                default:
+                    return null;
+            }
         }
 
         @Override
@@ -193,5 +191,5 @@ public class MainActivity extends AppCompatActivity {
 //            return null;
 //
 //            }
-        }
     }
+}
