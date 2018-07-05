@@ -5,6 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,15 +26,22 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 
 import org.jsoup.Jsoup;
+import org.jsoup.helper.HttpConnection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Tab2Pictures extends Fragment {
 
@@ -90,6 +100,38 @@ public class Tab2Pictures extends Fragment {
             }
         });
 
+        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                final String aaa = items.get(position);
+
+
+                // Thread로 웹서버에 접속
+                new Thread() {
+                    public void run() {
+                        //String naverHtml = getNaverHtml();
+
+                          MakeTake(aaa);
+
+//                        Bundle bun = new Bundle();
+//                        bun.putString("NAVER_HTML", naverHtml);
+//                        Message msg = handler.obtainMessage();
+//                        msg.setData(bun);
+//                        handler.sendMessage(msg);
+                    }
+                }.start();
+
+
+
+                Toast.makeText(getActivity(), aaa+ "\n선택한 이미지가 저장되었습니다.",  Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
+
 
         return rootView;
     }
@@ -128,7 +170,7 @@ public class Tab2Pictures extends Fragment {
             ////////////////////////////////////////////////////////////////HTML에서 가져오기
 
             imageviewHtmlDocument = convertView.findViewById(R.id.icons);
-            Glide.with(convertView).load(items.get(position)).into(imageviewHtmlDocument);
+            Glide.with(getContext()).load(items.get(position)).into(imageviewHtmlDocument);
 
             return convertView;
         }
@@ -213,5 +255,65 @@ public class Tab2Pictures extends Fragment {
 //        }
 //        return a;
 //    }
+
+
+    public void MakeTake(String url){
+        URL imgURL = null;
+        HttpURLConnection connection = null;
+        InputStream is = null;
+        Bitmap saveImg = null;
+
+        try{
+            System.out.println("접속하는 URL는 : "+ url);
+            imgURL = new URL(url);
+            connection = (HttpURLConnection) imgURL.openConnection();
+            connection.setDoInput(true); //url로 input받는 flag 허용
+            connection.connect();
+            is = connection.getInputStream(); // get inputstream
+            saveImg = BitmapFactory.decodeStream(is);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(connection!=null){
+                connection.disconnect();
+            }
+        }
+
+        String StoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String savePath = StoragePath + "/DCIM/Camera";
+
+        File f = new File(savePath);
+        if (!f.isDirectory()) f.mkdirs();
+        if(saveImg == null){
+            System.out.println("이미지 파일을 불러오지 못했슈");
+        }
+        FileOutputStream fos = null;
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String strFilePath = savePath + "/randompic" + timeStamp + ".jpeg";
+        File fileCacheItem = new File(strFilePath);
+
+        //System.out.println("파일 이름은 : randompic_"+timeStamp+".jpeg");
+        //System.out.println("파일 저장경로는 : "+strFilePath);
+
+        try{
+            fos = new FileOutputStream(fileCacheItem);
+            saveImg.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            getContext().sendBroadcast(new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileCacheItem)) );
+            //Toast.makeText(getContext(), "사진을 저장했습니다.", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
 
 }
