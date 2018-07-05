@@ -49,20 +49,20 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private CustomViewPager mViewPager;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
                 Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
-
-        //activity를 위한 레이아웃  UI를 설정할때 이용
-        //activity_main.xml의 레이아웃 UI를 이용하겠다!
-        setContentView(R.layout.activity_main);
+                //activity를 위한 레이아웃  UI를 설정할때 이용
+                //activity_main.xml의 레이아웃 UI를 이용하겠다!
+                setContentView(R.layout.activity_main);
 
 
         //Set a toolbar to replace to action bar
@@ -96,9 +96,7 @@ public class MainActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
-
             }
-
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
                 Toast.makeText(getApplicationContext(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
@@ -107,8 +105,9 @@ public class MainActivity extends AppCompatActivity {
         new TedPermission(getApplicationContext())
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("If you reject permission, you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.READ_CONTACTS)
+                .setPermissions(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
                 .check();
+            }
 
     }
 
@@ -195,8 +194,4 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
         }
-
-
-
-
     }
